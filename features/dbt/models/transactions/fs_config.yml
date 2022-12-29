@@ -1,0 +1,40 @@
+# Field required by DBT
+version: 2
+enabled: True
+schedule_interval: "0 4 * * *"
+timezone: "Europe/London"
+team: data_science_team_a
+kind: dbt_to_fs_pipeline
+
+experimental_feature_store:
+  project: vertex-ai-test-365213
+  location: us-central1
+  id: test_feature_store
+  # supported mode are "ingest" and "check_types_only"
+  ingestion_mode: ingest
+
+feature_mapping:
+- entity_type_id: customer2
+  feature_time: tx_ts
+  entity_id_field: customer_id
+  output_full_table_id: eliasecchi_dev.transactions__feature_creation_sample
+  features: 
+  - feature_name: avg_tx_amount_7d
+    column_name: avg_tx_amount_by_customer_id_7d_1s
+    description: "The avg value spent by the customer in the last 7 days"
+    monitoring: enabled
+  - feature_name: count_tx_28d
+    column_name: count_tx_amount_by_customer_id_28d_1s
+    description: "The number of transactions made by the customer in the last 7 days"
+- entity_type_id: terminal2
+  feature_time: tx_ts
+  entity_id_field: terminal_id
+  output_full_table_id: eliasecchi_dev.transactions__feature_creation_sample
+  features: 
+  - feature_name: max_tx_amount_28d 
+    column_name: max_tx_amount_by_terminal_id_28d_1s
+    description: "The number of transactions made at this terminal in the last 28 days"
+    monitoring: enabled
+  - feature_name: max_tx_amount_90d
+    column_name: max_tx_amount_by_terminal_id_90d_1s
+    description: "The number of transactions made at this terminal in the last 90 days"

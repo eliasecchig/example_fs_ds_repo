@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: transactions
+    database: vertex-ai-test-365213 # gcp-project
+    dataset: tx # gcp-dataset
+
+#    freshness:
+#      warn_after: { count: 24, period: hour }
+#      error_after: { count: 30, period: hour }
+
+    tables:
+      - name: tx
+        description: "Raw transactions table"
+      - name: txlabels
+        description: "Raw transactions table"
