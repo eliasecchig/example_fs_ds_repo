@@ -3,9 +3,6 @@ import io
 import json
 import logging
 import yaml
-import random
-import uuid
-import time
 from typing import Optional, Dict, List
 from google.cloud import aiplatform as vertex_ai
 from google.cloud import bigquery
@@ -13,6 +10,7 @@ from google.cloud.aiplatform import EntityType, Feature, Featurestore
 from google.api_core.exceptions import NotFound
 
 FS_INGESTION_DATASET = 'fs_ingestion'
+
 
 def create_fs_if_not_exists(project: str, location: str, featurestore_id: str) -> Featurestore:
     vertex_ai.init(project=project, location=location)
@@ -114,31 +112,32 @@ def get_column_name_from_feature_dict(feature_dict) -> str:
         column_name = feature_dict['feature_name']
     return column_name
 
+
 def get_feature_source_fields(entity_type_dict: dict) -> dict:
     feature_source_fields = {}
-    for feature_dict in entity_type_dict['features']: 
-        column_name =  get_column_name_from_feature_dict(feature_dict=feature_dict)
+    for feature_dict in entity_type_dict['features']:
+        column_name = get_column_name_from_feature_dict(feature_dict=feature_dict)
         feature_name = feature_dict['feature_name']
         feature_source_fields[feature_name] = column_name
     return feature_source_fields
 
 
-
 def check_types_before_ingestion(
-     bq_source_uri: str,
-     schema_fs_types: dict,
-                entity_type: EntityType,
-                feature_source_fields: dict):
+        bq_source_uri: str,
+        schema_fs_types: dict,
+        entity_type: EntityType,
+        feature_source_fields: dict):
     features = entity_type.list_features()
     for feature in features:
         column_name = feature_source_fields[feature.name]
         feature_value_type_in_bq = schema_fs_types[column_name]
-        feature_value_type_in_fs = str(feature.gca_resource.value_type.name )
+        feature_value_type_in_fs = str(feature.gca_resource.value_type.name)
         try:
             assert feature_value_type_in_bq == feature_value_type_in_fs
         except AssertionError as e:
-            logging.error(f'For input table {bq_source_uri}, column {column_name} \n FS feature {feature.name} detected inconsistency between ' 
-                          f'column type in BQ {feature_value_type_in_bq} and relative value in the FS {feature_value_type_in_fs}')
+            logging.error(
+                f'For input table {bq_source_uri}, column {column_name} \n FS feature {feature.name} detected inconsistency between '
+                f'column type in BQ {feature_value_type_in_bq} and relative value in the FS {feature_value_type_in_fs}')
             raise e
     logging.info(f'Types checked successfully for entity_type {entity_type.name} in {entity_type.featurestore_name}')
 
@@ -154,8 +153,10 @@ def setup_fs_from_config(fs_config: dict):
         location=location,
         featurestore_id=featurestore_id
     )
+    ingestion_jobs = []
     for entity_type_dict in fs_config['feature_mapping']:
-        output_full_table_id = str(bq_client.get_table(entity_type_dict['output_full_table_id']).full_table_id).replace(':','.')
+        output_full_table_id = str(bq_client.get_table(entity_type_dict['output_full_table_id']).full_table_id).replace(
+            ':', '.')
         schema_fs_types = get_fs_types_from_bq_table(
             bq_client=bq_client,
             full_table_id=output_full_table_id
@@ -192,11 +193,15 @@ def setup_fs_from_config(fs_config: dict):
                 feature_time=entity_type_dict['feature_time'],
                 feature_source_fields=feature_source_fields,
                 entity_id_field=entity_type_dict['entity_id_field'],
-                disable_online_serving=True,
-                sync=True
+                disable_online_serving=False,
+                sync=False,
+                worker_count=1
             )
+            ingestion_jobs.append(ingestion_job)
         else:
             raise ValueError(f'Value for {ingestion_mode} not supported')
+    for ingestion_job in ingestion_jobs:
+        ingestion_job.wait()
 
 
 def parse_args():

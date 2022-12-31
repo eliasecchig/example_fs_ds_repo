@@ -25,6 +25,7 @@ FORMAT_DATE('%A', tx_ts) AS day_of_the_week,
     exclude_current_row=True
     )
 }}
+CURRENT_TIMESTAMP() AS created_timestamp
 FROM {{ ref('transactions__preprocessing') }}
 WHERE True
 {{ incremental_date_filter("tx_ts","tx_ts") }}
