@@ -3,7 +3,7 @@ version: 2
 
 models:
   - name: transactions__preprocessing
-    description: "A starter dbt model"
+    description: "A starter dbt_project1 model"
     columns:
       - name: tx_id
         description: "The transaction id"

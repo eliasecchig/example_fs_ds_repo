@@ -146,7 +146,7 @@ def setup_fs_from_config(fs_config: dict):
     project = fs_config['experimental_feature_store']['project']
     location = fs_config['experimental_feature_store']['location']
     featurestore_id = fs_config['experimental_feature_store']['id']
-    ingestion_mode = fs_config['experimental_feature_store']['ingestion_mode']
+    mode = fs_config['experimental_feature_store']['ingestion_mode']
     bq_client = bigquery.Client(project=project, location=location)
     feature_store = create_fs_if_not_exists(
         project=project,
@@ -178,14 +178,14 @@ def setup_fs_from_config(fs_config: dict):
                 description=feature_dict.get('description')
             )
         feature_source_fields = get_feature_source_fields(entity_type_dict=entity_type_dict)
-        if ingestion_mode == 'check_types_only':
+        if mode == 'check_types_only':
             check_types_before_ingestion(
                 bq_source_uri=output_full_table_id,
                 schema_fs_types=schema_fs_types,
                 entity_type=entity_type,
                 feature_source_fields=feature_source_fields
             )
-        elif ingestion_mode == 'ingest':
+        elif mode == 'ingest':
             logging.info(f"Beginning ingestion process for table {output_full_table_id}")
             ingestion_job = entity_type.ingest_from_bq(
                 bq_source_uri=f"bq://{output_full_table_id}",
@@ -199,7 +199,7 @@ def setup_fs_from_config(fs_config: dict):
             )
             ingestion_jobs.append(ingestion_job)
         else:
-            raise ValueError(f'Value for {ingestion_mode} not supported')
+            raise ValueError(f'Value for {mode} not supported')
     for ingestion_job in ingestion_jobs:
         ingestion_job.wait()
 
