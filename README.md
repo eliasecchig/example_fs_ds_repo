@@ -1,20 +1,35 @@
-# Showcasing Feature Engineering with DBT
+# Showcasing Feature Engineering with Data Engineering tools
 
-SETUP
-
-```commandline
- python scripts/copy_bigquery_data.py --project vertex-ai-test-365213 --location  europe-west2   
-```
-### Using the project
-
-Try running the following commands:
-- dbt run
-- dbt test
-
+## Existing features
+- [x] Feature Engineering with DBT
+- [ ] DBT with python models
+- [ ] Feature Engineering with Dataform
 
 ### Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+- Learn how to setup DBT in your environment [in this doc](https://docs.getdbt.com/reference/warehouse-setups/bigquery-setup)
+
+### Setup the environment
+```commandline
+virtualenv venv && source venv/bin/activate && pip install -r requirements.txt
+```
+### Download data in your BQ Environmnet
+```commandline
+python tools/copy_bigquery_data.py --project vertex-ai-test-365213 --location  europe-west2   
+```
+### Using the project
+
+To build features:
+```commandline
+(cd features/dbt_project && dbt run)
+```
+To run data assertions:
+```commandline
+(cd features/dbt_project && dbt test)
+```
+
+To test the feature creation and ingestion process on a dummy feature store:
+```commandline
+python tools/manual_ingestion_to_fs.py --config_path features/dbt_project/fs_config.yml
+```
+

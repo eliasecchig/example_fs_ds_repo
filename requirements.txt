@@ -1,0 +1,5 @@
+dbt-bigquery==1.4.0
+google-cloud-aiplatform==1.21.0
+PyYAML==6.0
+pandas==1.5.3
+pyarrow==11.0.0

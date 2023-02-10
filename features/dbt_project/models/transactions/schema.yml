@@ -1,0 +1,12 @@
+
+version: 2
+
+models:
+  - name: transactions__preprocessing
+    description: "A starter dbt_project model"
+    columns:
+      - name: tx_id
+        description: "The transaction id"
+        tests:
+          - not_null
+          - unique

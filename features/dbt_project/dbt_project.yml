@@ -6,10 +6,10 @@ name: 'example_fs_ds_repo'
 version: '1.0.0'
 config-version: 2
 
-# This setting configures which "profile" dbt_project1 uses for this project.
+# This setting configures which "profile" dbt_project uses for this project.
 profile: 'dummy_org_profile'
 
-# These configurations specify where dbt_project1 should look for different types of files.
+# These configurations specify where dbt_project should look for different types of files.
 # The `model-paths` config, for transactions, states that models in this project can be
 # found in the "models/" directory. You probably won't need to change these!
 model-paths: ["models"]
@@ -20,7 +20,7 @@ macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
 target-path: "target"  # directory which will store compiled SQL files
-clean-targets:         # directories to be removed by `dbt_project1 clean`
+clean-targets:         # directories to be removed by `dbt_project clean`
   - "target"
   - "dbt_packages"
 
@@ -29,7 +29,7 @@ clean-targets:         # directories to be removed by `dbt_project1 clean`
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
-# In this transactions config, we tell dbt_project1 to build all models in the transactions/ directory
+# In this transactions config, we tell dbt_project to build all models in the transactions/ directory
 # as views. These settings can be overridden in the individual model files
 # using the `{{ config(...) }}` macro.
 models:
