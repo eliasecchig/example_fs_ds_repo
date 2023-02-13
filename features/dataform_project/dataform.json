@@ -1,0 +1,7 @@
+{
+  "defaultSchema": "dataform",
+  "assertionSchema": "dataform_assertions",
+  "warehouse": "bigquery",
+  "defaultDatabase": "vertex-ai-test-365213",
+  "defaultLocation": "us-central1"
+}

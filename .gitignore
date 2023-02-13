@@ -5,3 +5,4 @@ logs/
 .idea
 .vscode
 .ipynb_checkpoint
+node_modules/
