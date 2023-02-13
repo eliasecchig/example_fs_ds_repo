@@ -1,6 +1,6 @@
 # Showcasing Feature Engineering with Data Engineering tools
 
-## Existing features
+## Roadmap
 - [x] Feature Engineering with DBT
 - [x] Feature Engineering with Dataform Cloud
 - [x] Compatibility with Dataform Core
