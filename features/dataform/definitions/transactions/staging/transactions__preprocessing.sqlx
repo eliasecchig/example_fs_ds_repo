@@ -1,0 +1,16 @@
+config {
+  type: "view"
+}
+
+SELECT
+raw_tx.tx_ts,
+raw_tx.tx_id,
+raw_tx.customer_id,
+raw_tx.terminal_id,
+raw_tx.tx_amount,
+raw_lb.tx_fraud
+FROM ${ref("tx")} AS raw_tx
+LEFT JOIN ${ref("txlabels")} AS raw_lb
+ON raw_tx.TX_ID = raw_lb.TX_ID
+
+

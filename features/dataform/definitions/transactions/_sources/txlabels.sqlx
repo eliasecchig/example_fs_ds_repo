@@ -1,0 +1,6 @@
+config {
+  type: "declaration",
+  database: "vertex-ai-test-365213",
+  schema: "tx",
+  name: "txlabels",
+}
