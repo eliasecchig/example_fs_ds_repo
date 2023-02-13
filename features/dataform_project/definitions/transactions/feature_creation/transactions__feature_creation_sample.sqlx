@@ -24,8 +24,10 @@ from ${ref("transactions__preprocessing")}
 WHERE TRUE
 ${ when(
     incremental(),
-    incremental_update.incremental_date_filter(
-        "tx_ts","tx_ts", `${ref("transactions__preprocessing")}`
-        )
+    incremental_update.incremental_date_filter({
+        "source_column_name":"tx_ts",
+        "target_column_name":"tx_ts",
+        "relation": `${ref("transactions__preprocessing")}`
+        })
     )
 }

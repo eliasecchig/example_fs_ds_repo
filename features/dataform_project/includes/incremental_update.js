@@ -1,4 +1,4 @@
-function incremental_date_filter(source_col_name, target_col_name, relation) {
+function incremental_date_filter({source_col_name, target_col_name, relation}) {
     // Macro that filters out already processed data in an incremental table.
 
     // Args:

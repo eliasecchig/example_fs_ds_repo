@@ -2,8 +2,9 @@
 
 ## Existing features
 - [x] Feature Engineering with DBT
+- [x] Feature Engineering with Dataform Cloud
+- [x] Compatibility with Dataform Core
 - [ ] DBT with python models
-- [ ] Feature Engineering with Dataform
 
 ### Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
