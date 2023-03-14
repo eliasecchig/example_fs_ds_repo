@@ -129,16 +129,17 @@ def check_types_before_ingestion(
         feature_source_fields: dict):
     features = entity_type.list_features()
     for feature in features:
-        column_name = feature_source_fields[feature.name]
-        feature_value_type_in_bq = schema_fs_types[column_name]
-        feature_value_type_in_fs = str(feature.gca_resource.value_type.name)
-        try:
-            assert feature_value_type_in_bq == feature_value_type_in_fs
-        except AssertionError as e:
-            logging.error(
-                f'For input table {bq_source_uri}, column {column_name} \n FS feature {feature.name} detected inconsistency between '
-                f'column type in BQ {feature_value_type_in_bq} and relative value in the FS {feature_value_type_in_fs}')
-            raise e
+        if feature.name in feature_source_fields:
+            column_name = feature_source_fields[feature.name]
+            feature_value_type_in_bq = schema_fs_types[column_name]
+            feature_value_type_in_fs = str(feature.gca_resource.value_type.name)
+            try:
+                assert feature_value_type_in_bq == feature_value_type_in_fs
+            except AssertionError as e:
+                logging.error(
+                    f'For input table {bq_source_uri}, column {column_name} \n FS feature {feature.name} detected inconsistency between '
+                    f'column type in BQ {feature_value_type_in_bq} and relative value in the FS {feature_value_type_in_fs}')
+                raise e
     logging.info(f'Types checked successfully for entity_type {entity_type.name} in {entity_type.featurestore_name}')
 
 

@@ -11,7 +11,7 @@ FORMAT_DATE('%A', tx_ts)  AS day_of_the_week,
     columns_to_aggregate=["tx_amount"],
     partition="customer_id",
     timestamp_column="tx_ts",
-    lookback_windows_start=["1h", "7d", "28d", "90d"],
+    lookback_windows_start=["1h", "5d", "28d", "90d"],
     exclude_current_row=True
     )
 }}
