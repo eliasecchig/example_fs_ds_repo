@@ -11,7 +11,7 @@ experimental_feature_store:
   location: us-central1
   id: test_feature_store
   # supported mode are "ingest" and "check_types_only"
-  ingestion_mode: ingest
+  ingestion_mode: check_types_only
 
 feature_mapping:
 - entity_type_id: customer
@@ -19,19 +19,22 @@ feature_mapping:
   entity_id_field: customer_id
   output_full_table_id: eliasecchi_dev.transactions__feature_creation_sample
   features:
-  - feature_name: avg_tx_amount_7d
-    column_name: avg_tx_amount_by_customer_id_5d_1s
-    description: "The avg value spent by the customer in the last 5 days"
+  - feature_name: count_tx_28d_v2
+    column_name: avg_tx_amount_by_customer_id_7d_1s
+    description: "The avg value spent by the customer in the last 7 days"
     monitoring: enabled
   - feature_name: count_tx_28d
     column_name: count_tx_amount_by_customer_id_28d_1s
-    description: "The number of transactions made by the customer in the last 28 days"
+    description: "The number of transactions made by the customer in the last 7 days - Deprecated please use count_tx_28d_v2"
+  - feature_name: max_tx_amount_by_terminal_id_175d_1s
+    column_name: max_tx_amount_by_terminal_id_175d_1s
+    description: "The number of transactions made by the customer in the last 175 days"
 - entity_type_id: terminal
   feature_time: tx_ts
   entity_id_field: terminal_id
   output_full_table_id: eliasecchi_dev.transactions__feature_creation_sample
   features: 
-  - feature_name: max_tx_amount_28d
+  - feature_name: max_tx_amount_28d_v1
     column_name: max_tx_amount_by_terminal_id_28d_1s
     description: "The number of transactions made at this terminal in the last 28 days"
     monitoring: enabled
